@@ -75,7 +75,7 @@ Each agent writes one key via `output_key`. Downstream agents reference it in th
 ## Setup
 
 ```bash
-git clone https://github.com/kobyal/ai-agents-google-adk
+git clone https://github.com/kobyal/ai-latest-briefing
 cd ai-latest-briefing
 
 python -m venv .venv && source .venv/bin/activate
