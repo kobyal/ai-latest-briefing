@@ -82,17 +82,24 @@ def _parse(value):
     return {}  # Return empty dict gracefully rather than crashing
 
 
-def build_and_save_html(briefing_json: str, hebrew_json: str = "", topic: str = "AI") -> dict:
+def build_and_save_html(topic: str = "AI", tool_context=None) -> dict:
     """Build and save the latest briefing as a bilingual HTML newsletter.
 
+    Reads briefing and briefing_he directly from session state to avoid
+    LLM truncation when large JSON is passed as a tool argument.
+
     Args:
-        briefing_json: JSON string or dict with BriefingContent (EN).
-        hebrew_json: JSON string or dict with HebrewBriefing (optional).
         topic: Topic label for the briefing header.
 
     Returns:
         {"saved_to": path, "success": True}
     """
+    briefing_json = ""
+    hebrew_json = ""
+    if tool_context is not None:
+        briefing_json = tool_context.state.get("briefing", "")
+        hebrew_json = tool_context.state.get("briefing_he", "")
+        print(f"Publisher -- read briefing from state ({len(str(briefing_json))} chars)")
     data = _parse(briefing_json)
     he = _parse(hebrew_json) if hebrew_json else {}
 

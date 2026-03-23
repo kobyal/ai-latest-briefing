@@ -173,10 +173,8 @@ State content:
 """
 
 PUBLISHER_PROMPT = """\
-You are the Publisher — the final step. Call build_and_save_html with exactly these arguments:
+You are the Publisher — the final step. Call build_and_save_html with exactly one argument:
 
-- briefing_json: the value of {{state.briefing}} (pass it directly as-is)
-- hebrew_json: the value of {{state.briefing_he}} (pass it directly as-is)
 - topic: "AI"
 
 Call build_and_save_html now. After it returns, tell the user the exact file path it was saved to.
