@@ -38,6 +38,14 @@ jobs:
           git diff --staged --quiet || git commit -m "briefing: $(date +'%Y-%m-%d %H:%M UTC')"
           git push
 
+      - name: Rebuild GitHub Pages
+        run: |
+          curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/kobyal/ai-latest-briefing/pages/builds
+          sleep 30
+
       - name: Send email
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
