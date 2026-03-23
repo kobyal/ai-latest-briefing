@@ -1,0 +1,44 @@
+name: Daily AI Briefing
+
+on:
+  schedule:
+    - cron: '0 4 * * *'   # 6am Israel time (UTC+2)
+  workflow_dispatch:        # manual trigger from GitHub UI
+
+jobs:
+  briefing:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run briefing
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_GENAI_MODEL: gemini-2.5-flash
+          LOOKBACK_DAYS: 3
+        run: python run.py
+
+      - name: Commit output to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add output/
+          git diff --staged --quiet || git commit -m "briefing: $(date +'%Y-%m-%d %H:%M UTC')"
+          git push
+
+      - name: Send email
+        env:
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python send_email.py
