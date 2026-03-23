@@ -4,6 +4,8 @@ A 6-step autonomous agent pipeline that researches the latest AI news from 5 maj
 
 Built with [Google ADK](https://google.github.io/adk-docs/) and Gemini 2.5 Flash.
 
+**Medium article**: [How I Replaced My Morning AI News Routine With Google ADK — A 6-Step Multi-Agent Pipeline](https://medium.com/@kobyal/how-i-replaced-my-morning-ai-news-routine-with-google-adk-a-6-step-multi-agent-pipeline-cb38bc857582)
+
 ---
 
 ## What it produces
