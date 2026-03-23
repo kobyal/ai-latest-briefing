@@ -67,7 +67,13 @@ def _parse(value):
             return ast.literal_eval(value)
         except Exception:
             pass
-        # Last resort: try fixing unescaped quotes inside JSON string values
+        # Fix 1: replace " between Hebrew characters (e.g. ארה"ב → ארה״ב)
+        try:
+            fixed = re.sub(r'([\u0590-\u05FF])"([\u0590-\u05FF])', r'\1\u05f4\2', value)
+            return json.loads(fixed)
+        except Exception:
+            pass
+        # Fix 2: escape any remaining unescaped " inside JSON string values
         try:
             fixed = re.sub(r'(?<=: ")(.+?)(?="(?:\s*[,}]))', lambda m: m.group(0).replace('"', '\\"'), value)
             return json.loads(fixed)
